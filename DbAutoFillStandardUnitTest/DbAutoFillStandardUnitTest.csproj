@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DbAutoFillNext\DbAutoFillStandard.csproj" />
+    <ProjectReference Include="..\DbAutoFillStandard\DbAutoFillStandard.csproj" />
   </ItemGroup>
 
 </Project>
