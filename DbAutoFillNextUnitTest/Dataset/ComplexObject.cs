@@ -17,5 +17,13 @@ namespace DbAutoFillNextCoreUnitTest.Dataset
 
         [DbAutoFill(FillBehavior = DbFillBehavior.None)]
         public int Unsettable { get; private set; }
+
+        [DbAutoFill(Alias = "ALittleTest")]
+        public bool Aliased { get; set; }
+
+        public ComplexObject()
+        {
+            Aliased = false;
+        }
     }
 }

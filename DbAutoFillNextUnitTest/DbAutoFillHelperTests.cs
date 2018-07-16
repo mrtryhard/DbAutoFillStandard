@@ -1,6 +1,6 @@
+using DbAutoFillNextCoreUnitTest.Dataset;
 using DbAutoFillStandard;
 using DbAutoFillStandard.Types;
-using DbAutoFillNextCoreUnitTest.Dataset;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Data;
@@ -72,13 +72,15 @@ namespace DbAutoFillStandardUnitTest
             const string expectedNameInName = "p_NameIN_IN";
             const string expectedToDbUuidName = "p_ToDbUuid";
             const string expectedNameINValue = "ComplexObject";
+            const string expectedAliasedFieldName = "p_ALittleTest";
             const int expectedToDbUuidValue = 5;
 
             ComplexObject obj = new ComplexObject
             {
                 NameIN = expectedNameINValue,
                 ToDbUuid = expectedToDbUuidValue,
-                FromDbId = 66
+                FromDbId = 66,
+                Aliased = true
             };
 
             DbAutoFillHelper.FillDbParametersFromObject(command, obj);
@@ -87,6 +89,7 @@ namespace DbAutoFillStandardUnitTest
             Assert.AreEqual(expectedNameINValue, command.Parameters[expectedNameInName].Value);
             Assert.AreEqual(expectedToDbUuidName, command.Parameters[expectedToDbUuidName].ParameterName);
             Assert.AreEqual(expectedToDbUuidValue, command.Parameters[expectedToDbUuidName].Value);
+            Assert.AreEqual(expectedAliasedFieldName, command.Parameters[expectedAliasedFieldName].ParameterName);
             Assert.ThrowsException<IndexOutOfRangeException>(() => { string n = command.Parameters["FromDbId"].ParameterName; });
             Assert.ThrowsException<IndexOutOfRangeException>(() => { string n = command.Parameters["Unsettable"].ParameterName; });
         }
@@ -121,20 +124,23 @@ namespace DbAutoFillStandardUnitTest
             const string nameINField = "NameIN";
             const string toDbUuidField = "ToDbUuid";
             const string fromDbIdField = "FromDbId";
+            const string expectedAliasedColumnName = "ALittleTest";
 
             const string expectedNameINValue = "ComplexObject";
             const int unexpectedToDbUuidValue = 23;
             const int expectedFromDbUuid = 3;
             const int expectedToDbUuidValue = -19;
+            const bool expectedAliaseColumnValue = true;
 
             DataTable dt = DatasetGenerator.CreateNewBasicDataTable(
-                new string[] { nameINField, toDbUuidField, fromDbIdField },
-                new Type[] { typeof(string), typeof(int), typeof(int) });
+                new string[] { nameINField, toDbUuidField, fromDbIdField, expectedAliasedColumnName },
+                new Type[] { typeof(string), typeof(int), typeof(int), typeof(string) });
 
             using (IDataReader dr = DatasetGenerator.CreateBasicDataReader(dt, 
                 expectedNameINValue, 
                 unexpectedToDbUuidValue, 
-                expectedFromDbUuid))
+                expectedFromDbUuid,
+                expectedAliaseColumnValue))
             {
                 dr.Read();
 
@@ -147,6 +153,7 @@ namespace DbAutoFillStandardUnitTest
                 Assert.AreNotEqual(unexpectedToDbUuidValue, obj.ToDbUuid);
                 Assert.AreEqual(expectedToDbUuidValue, obj.ToDbUuid);
                 Assert.AreEqual(expectedFromDbUuid, obj.FromDbId);
+                Assert.AreEqual(expectedAliaseColumnValue, obj.Aliased);
             }
         }
 
