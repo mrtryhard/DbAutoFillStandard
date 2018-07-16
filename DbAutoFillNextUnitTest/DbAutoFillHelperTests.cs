@@ -1,6 +1,6 @@
-using DbAutoFillNextCoreUnitTest.Dataset;
 using DbAutoFillStandard;
 using DbAutoFillStandard.Types;
+using DbAutoFillStandardUnitTest.Dataset;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Data;
@@ -103,7 +103,7 @@ namespace DbAutoFillStandardUnitTest
             const string intPropName = "IntField";
 
             DataTable dt = DatasetGenerator.CreateNewBasicDataTable(
-                new string[] { stringPropName, intPropName }, 
+                new string[] { stringPropName, intPropName },
                 new Type[] { typeof(string), typeof(int) });
 
             using (IDataReader dr = DatasetGenerator.CreateBasicDataReader(dt, expectedStringValue, expectedIntValue))
@@ -136,9 +136,9 @@ namespace DbAutoFillStandardUnitTest
                 new string[] { nameINField, toDbUuidField, fromDbIdField, expectedAliasedColumnName },
                 new Type[] { typeof(string), typeof(int), typeof(int), typeof(string) });
 
-            using (IDataReader dr = DatasetGenerator.CreateBasicDataReader(dt, 
-                expectedNameINValue, 
-                unexpectedToDbUuidValue, 
+            using (IDataReader dr = DatasetGenerator.CreateBasicDataReader(dt,
+                expectedNameINValue,
+                unexpectedToDbUuidValue,
                 expectedFromDbUuid,
                 expectedAliaseColumnValue))
             {
@@ -154,6 +154,42 @@ namespace DbAutoFillStandardUnitTest
                 Assert.AreEqual(expectedToDbUuidValue, obj.ToDbUuid);
                 Assert.AreEqual(expectedFromDbUuid, obj.FromDbId);
                 Assert.AreEqual(expectedAliaseColumnValue, obj.Aliased);
+            }
+        }
+
+        [TestMethod]
+        public void DbResultToSampleObjectAllowMissing()
+        {
+            const string mandatoryField = "Mandatory";
+            const int expectedMandatoryValue = 890;
+
+            {
+                DataTable dt = DatasetGenerator.CreateNewBasicDataTable(
+                    new string[] { mandatoryField },
+                    new Type[] { typeof(int) });
+
+                using (IDataReader dr = DatasetGenerator.CreateBasicDataReader(dt, expectedMandatoryValue))
+                {
+                    dr.Read();
+
+                    SampleObject obj = new SampleObject();
+
+                    DbAutoFillHelper.FillObjectFromDataReader(dr, obj);
+
+                    Assert.AreEqual(expectedMandatoryValue, obj.Mandatory);
+                }
+            }
+
+            {
+                DataTable dt = DatasetGenerator.CreateNewBasicDataTable(new string[] { }, new Type[] { });
+
+                using (IDataReader dr = DatasetGenerator.CreateBasicDataReader(dt, new object[] { }))
+                {
+                    dr.Read();
+                    SampleObject obj = new SampleObject();
+
+                    Assert.ThrowsException<MissingFieldException>(() => { DbAutoFillHelper.FillObjectFromDataReader(dr, obj); });
+                }
             }
         }
 

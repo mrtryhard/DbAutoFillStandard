@@ -1,7 +1,7 @@
 ﻿using DbAutoFillStandard.Types;
 using System.Collections.Generic;
 
-namespace DbAutoFillNextCoreUnitTest.Dataset
+namespace DbAutoFillStandardUnitTest.Dataset
 {
     [DbAutoFill(AllowMissing = false)]
     class BasicObject

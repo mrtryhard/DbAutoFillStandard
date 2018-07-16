@@ -1,6 +1,6 @@
 ﻿using DbAutoFillStandard.Types;
 
-namespace DbAutoFillNextCoreUnitTest.Dataset
+namespace DbAutoFillStandardUnitTest.Dataset
 {
     [DbAutoFill(AllowMissing = false,
         ParameterPrefix = "p_")]

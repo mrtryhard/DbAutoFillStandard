@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Data;
 
-namespace DbAutoFillNextCoreUnitTest.Dataset
+namespace DbAutoFillStandardUnitTest.Dataset
 {
     internal static class DatasetGenerator
     {
