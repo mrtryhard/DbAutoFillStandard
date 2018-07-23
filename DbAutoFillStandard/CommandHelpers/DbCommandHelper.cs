@@ -144,11 +144,11 @@ namespace DbAutoFillStandard.CommandHelpers
             switch (CaseTransform)
             {
                 case DbCaseTransform.SmallCase:
-                    procedureName = string.Format(_baseCmd, callerName.ToLower());
+                    procedureName = procedureName.ToLower();
                     break;
 
                 case DbCaseTransform.UpperCase:
-                    procedureName = string.Format(_baseCmd, callerName.ToUpper());
+                    procedureName = procedureName.ToUpper();
                     break;
 
                 case DbCaseTransform.None:
