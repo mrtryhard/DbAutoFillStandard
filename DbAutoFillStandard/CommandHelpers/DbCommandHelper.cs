@@ -8,6 +8,7 @@ namespace DbAutoFillStandard.CommandHelpers
     public abstract class DbCommandHelper<TDbConnection>
         where TDbConnection : IDbConnection, new()
     {
+        public DbCaseTransform CaseTransform { get; set; }
         private string _baseCmd { get; set; }
         private string _connString { get; set; }
 
@@ -25,6 +26,7 @@ namespace DbAutoFillStandard.CommandHelpers
             if (string.IsNullOrWhiteSpace(connectionString))
                 throw new ArgumentException("Connection string must not be empty.", "connectionString");
 
+            CaseTransform = DbCaseTransform.None;
             _connString = connectionString;
             _baseCmd = CreateBaseCommandString(schemaName);
 
@@ -99,7 +101,7 @@ namespace DbAutoFillStandard.CommandHelpers
             if (inputObjects == null || inputObjects.Length == 0)
                 return new DbResponse<TResultType>(string.Format("Argument inputObject must not be null. Caller: {0}", callerName), new ArgumentNullException("inputObject"));
 
-            string procedureName = string.Format(_baseCmd, callerName);
+            string procedureName = TransformCallername(callerName);
             DbResponse<TResultType> response = new DbResponse<TResultType>();
 
             using (TDbConnection conn = new TDbConnection())
@@ -133,6 +135,28 @@ namespace DbAutoFillStandard.CommandHelpers
             }
 
             return response;
+        }
+
+        private string TransformCallername(string callerName)
+        {
+            string procedureName = string.Format(_baseCmd, callerName);
+
+            switch (CaseTransform)
+            {
+                case DbCaseTransform.SmallCase:
+                    procedureName = string.Format(_baseCmd, callerName.ToLower());
+                    break;
+
+                case DbCaseTransform.UpperCase:
+                    procedureName = string.Format(_baseCmd, callerName.ToUpper());
+                    break;
+
+                case DbCaseTransform.None:
+                default:
+                    break;
+            }
+
+            return procedureName;
         }
 
         private void AddParametersWithValueToCommand(IDbCommand command, params object[] parameters)
