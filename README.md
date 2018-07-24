@@ -1,5 +1,5 @@
 # DbAutoFillStandard
-A .NETStandard version of the [https://github.com/VircomOpenSource/DbAutoFill](Vircom's DbAutoFill) library.
+A .NETStandard version of the [Vircom's DbAutoFill](https://github.com/VircomOpenSource/DbAutoFill) library.
 
 ## Differences from original library
 * Improved interface
@@ -59,5 +59,5 @@ This offer a tight coupling between the SQL interface and your C# interface.
 See LICENSE.md. Spoilers: it's MIT.
 
 ## Documentation / Examples
-See [https://github.com/VircomOpenSource/DbAutoFill](Vircom's DbAutoFill), which contains some examples that are very close to how to use this version.
+See [Vircom's DbAutoFill](https://github.com/VircomOpenSource/DbAutoFill), which contains some examples that are very close to how to use this version.
 Some function, interface names are different as well as one or signature changes for uniformization.
