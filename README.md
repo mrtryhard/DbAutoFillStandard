@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/mrtryhard/DbAutoFillStandard.svg?branch=master)](https://travis-ci.com/mrtryhard/DbAutoFillStandard)
+
 # DbAutoFillStandard
 A .NETStandard version of the [Vircom's DbAutoFill](https://github.com/VircomOpenSource/DbAutoFill) library.
 
