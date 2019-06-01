@@ -181,13 +181,14 @@ namespace DbAutoFillStandard.CommandHelpers
         private void ReadResultsToDbResponse<TObjects>(IDbCommand command, DbResponse<TObjects> response)
             where TObjects : new()
         {
-            IDataReader reader = command.ExecuteReader();
-
-            while (reader.Read())
+            using (IDataReader reader = command.ExecuteReader())
             {
-                TObjects obj = new TObjects();
-                DbAutoFillHelper.FillObjectFromDataReader(reader, obj);
-                response.ResultSet.Add(obj);
+                while (reader.Read())
+                {
+                    TObjects obj = new TObjects();
+                    DbAutoFillHelper.FillObjectFromDataReader(reader, obj);
+                    response.ResultSet.Add(obj);
+                }
             }
         }
     }
